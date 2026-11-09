@@ -1,24 +1,36 @@
 const portfolioItems = [
   {
-    title: "Neon Hours",
-    description: "Produced and mixed a late-night electronic single with a wide, cinematic finish.",
-    tag: "Original Production"
+    title: "Outdoor Venue",
+    description: "Open-air venue and stage setup ahead of a live event.",
+    tag: "Venue Stagecraft",
+    image: "assets/Portfolio 1.png",
+    alt: "Outdoor concert venue with a covered stage and lighting rig."
   },
   {
-    title: "Static Heart",
-    description: "Mixed and mastered an alternative release for clarity, punch, and emotional weight.",
-    tag: "Mix / Master"
+    title: "Live Event LED",
+    description: "Event stage featuring a multi-screen LED video wall.",
+    tag: "LED Video",
+    image: "assets/Portfolio 2.png",
+    alt: "Indoor event stage with several large LED screens."
+  },
+  {
+    title: "Heartland Summit",
+    description: "Multi-screen presentation setup for the Heartland Summit.",
+    tag: "Event Production",
+    image: "assets/Portfolio 3.png",
+    alt: "Heartland Summit stage with a large center LED wall and two side screens."
+  },
+  {
+    title: "Theatre Stage",
+    description: "Theatre auditorium viewed from the stage during event setup.",
+    tag: "Theatre",
+    image: "assets/Portfolio 4.png",
+    alt: "Theatre auditorium and seating viewed from the stage."
   }
 ];
 
 const videos = [
-  { id: "CMmuctaTKm8", caption: "A look inside a mix session." }
-];
-
-const audioTracks = [
-  { title: "Neon Hours", role: "Mixed & Mastered", src: "assets/audio/ElliottDavies_NeonNours_Mastering Session 2026.9.mp3" },
-  { title: "Open Frequency", role: "Original Production", src: "assets/audio/track2.mp3" },
-  { title: "Static Heart", role: "Mixed & Mastered", src: "assets/audio/track3.mp3" }
+  { id: "TPZcdZRf-rU", caption: "Live event stagecraft and LED video wall work." }
 ];
 
 const renderPortfolio = () => {
@@ -29,9 +41,10 @@ const renderPortfolio = () => {
     "afterbegin",
     portfolioItems
       .map(
-        ({ title, description, tag }, index) => `
+        ({ title, description, tag, image, alt }) => `
           <article class="project-card">
-            <div class="project-media project-media-${index + 1}">
+            <div class="project-media">
+              <img src="${image}" alt="${alt}" loading="lazy" />
               <span class="project-tag">${tag}</span>
             </div>
             <div class="project-content">
@@ -67,92 +80,7 @@ const renderVideos = () => {
         </article>
       `
     )
-    .join("");
-};
-
-const formatTime = (seconds) => {
-  if (!Number.isFinite(seconds)) return "0:00";
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, "0");
-  return `${minutes}:${remainingSeconds}`;
-};
-
-const initAudioPlayer = () => {
-  const player = document.querySelector("[data-audio-player]");
-  if (!player) return;
-
-  const audio = player.querySelector("[data-audio-element]");
-  const playButton = player.querySelector("[data-audio-play]");
-  const playIcon = player.querySelector("[data-audio-play-icon]");
-  const progress = player.querySelector("[data-audio-progress]");
-  const title = player.querySelector("[data-audio-title]");
-  const role = player.querySelector("[data-audio-role]");
-  const currentTime = player.querySelector("[data-audio-current]");
-  const duration = player.querySelector("[data-audio-duration]");
-  const trackList = player.querySelector("[data-audio-track-list]");
-
-  trackList.innerHTML = audioTracks
-    .map(
-      (track, index) => `
-        <button class="audio-track${index === 0 ? " is-active" : ""}" type="button" data-track-index="${index}">
-          <span class="audio-track-number">0${index + 1}</span>
-          <span class="audio-track-info">
-            <strong>${track.title}</strong>
-            <small>${track.role}</small>
-          </span>
-          <span aria-hidden="true">↗</span>
-        </button>
-      `
-    )
-    .join("");
-
-  const loadTrack = (index) => {
-    const track = audioTracks[index];
-    audio.src = track.src;
-    title.textContent = track.title;
-    role.textContent = track.role;
-    progress.value = "0";
-    currentTime.textContent = "0:00";
-    duration.textContent = "0:00";
-    trackList.querySelectorAll(".audio-track").forEach((item, itemIndex) => {
-      item.classList.toggle("is-active", itemIndex === index);
-    });
-  };
-
-  playButton.addEventListener("click", () => {
-    if (audio.paused) {
-      audio.play().catch((error) => {
-        console.error("Unable to play the selected track.", error);
-      });
-    } else {
-      audio.pause();
-    }
-  });
-
-  progress.addEventListener("input", () => {
-    if (audio.duration) audio.currentTime = (Number(progress.value) / 100) * audio.duration;
-  });
-  audio.addEventListener("loadedmetadata", () => {
-    duration.textContent = formatTime(audio.duration);
-  });
-  audio.addEventListener("timeupdate", () => {
-    progress.value = audio.duration ? String((audio.currentTime / audio.duration) * 100) : "0";
-    currentTime.textContent = formatTime(audio.currentTime);
-  });
-  audio.addEventListener("play", () => {
-    playIcon.textContent = "Ⅱ";
-    playButton.setAttribute("aria-label", "Pause selected track");
-  });
-  audio.addEventListener("pause", () => {
-    playIcon.textContent = "▶";
-    playButton.setAttribute("aria-label", "Play selected track");
-  });
-  trackList.addEventListener("click", (event) => {
-    const trackButton = event.target.closest("[data-track-index]");
-    if (trackButton) loadTrack(Number(trackButton.dataset.trackIndex));
-  });
-
-  loadTrack(0);
+    .join(""    );
 };
 
 const initMobileNavigation = () => {
@@ -181,5 +109,4 @@ document.querySelectorAll("[data-year]").forEach((year) => {
 
 renderPortfolio();
 renderVideos();
-initAudioPlayer();
 initMobileNavigation();
