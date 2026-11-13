@@ -26,11 +26,19 @@ const portfolioItems = [
     tag: "Theatre",
     image: "assets/Portfolio 4.png",
     alt: "Theatre auditorium and seating viewed from the stage."
+  },
+  {
+    title: "Outdoor Lighting Installations",
+    description: "Outdoor installation illuminated with vibrant blue and magenta lighting.",
+    tag: "Outdoor Lighting",
+    image: "assets/Cosmic1.jpeg",
+    alt: "Outdoor installation illuminated with blue and magenta lights."
   }
 ];
 
 const videos = [
-  { id: "TPZcdZRf-rU", caption: "Live event stagecraft and LED video wall work." }
+  { id: "TPZcdZRf-rU", caption: "Live event stagecraft and LED video wall work." },
+  { id: "hmObrynIyAg", caption: "LED Warehouse." }
 ];
 
 const renderPortfolio = () => {
